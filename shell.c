@@ -1,4 +1,5 @@
 #include "main.h"
+<<<<<<< HEAD
 
 /**
  * main - function to see create a propmt for simple shell
@@ -72,3 +73,14 @@ int main(int argc, char **argv)
 
 	return (0);
 }
+=======
+#include <unistd.h>
+
+/** main - function to see if file descriptor refers to terminal
+ * return: 1 on success; err otherwise.
+ */
+
+
+
+
+>>>>>>> 89db709567b38cd3cf5ca2666f8f5654d16d2e87
