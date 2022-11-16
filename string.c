@@ -38,6 +38,7 @@ char *_strstr(char *haystack, char *needle)
 	}
 
 	return (NULL);
+}
 
 /**
  * _strcat- function to concatenate two strings
@@ -50,12 +51,12 @@ char *_strstr(char *haystack, char *needle)
 char *_strcat(char *dest, const char *src)
 {
 	int len_dest;
-	y = 0;
+	i = 0;
 
 	len_dest = _strlen(dest);
 
-	while (src[y])
-		dest[len_dest++] = src[y++];
+	while (src[i])
+		dest[len_dest++] = src[i++];
 	dest[len_dest] = '\0';
 
 	return (dest);

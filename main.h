@@ -37,7 +37,7 @@ typedef struct buitin_t
 /* ________________________function prototypes_______________________________ */
 
 /*executor*/
-int execute(char **cmd, char *filename);
+int execute(char **cmd, char **filename);
 
 /*prompt*/
 void init_prompt(void);

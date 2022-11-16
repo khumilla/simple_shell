@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * main - user interface
+ * main - interactive user interface
  * @argc: unused
  * @argv: command line arguments passed to main
  *
@@ -40,8 +40,13 @@ int main(int argc, char **argv[])
 		{
 			status = builtin(tokens, status, argv[0]);
 			free_memory_pp(tokens);
+			continue;
 		}
-		return (0);
+		else
+			status = execute (tokens,argv[0]);
+		
+		free_memory_pp(tokens);
 	}
-
+	
+	return (0);
 }
