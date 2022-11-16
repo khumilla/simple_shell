@@ -1,109 +1,86 @@
-#include "main.h"
-
-
-/**
- * rm_newline - Removes the new line from User's input
- * @line: the line inputted by user
- *
- * Return: input without newline
- */
-char *rm_newline(char *line)
-{
-	char *temp = line;
-
-	temp = strtok(temp, "\n");
-	return (temp);
-}
+#include "shell.h"
 
 /**
- * parse_input - parses the line entered by the user
- * @line: the given input
+ * is_cmd - determines if a file is an executable command
+ * @info: the info struct
+ * @path: path to the file
  *
- * Return: an array of tokens present in @line
+ * Return: 1 if true, 0 otherwise
  */
-char **parse_input(char *line)
+int is_cmd(info_t *info, char *path)
 {
-	char **tokens;
-	char *tok, *temp;
-	int i;
+	struct stat st;
 
-	if (!line)
-		return (NULL);
+	(void)info;
+	if (!path || stat(path, &st))
+		return (0);
 
-	tokens = malloc(sizeof(char *) * _strlen(line));
-	if (!tokens)
+	if (st.st_mode & S_IFREG)
 	{
-		perror("Gsh");
-		return (NULL);
+		return (1);
 	}
-
-	line = rm_newline(line);
-
-	temp = _strdup(line);
-	tok = strtok(temp, " ");
-	for (i = 0; tok; i++)
-	{
-		tokens[i] = _strdup(tok);
-		tok = strtok(NULL, " ");
-	}
-	tokens[i] = NULL;
-
-	free(temp);
-
-	return (tokens);
+	return (0);
 }
 
 /**
- * build_path - build the path to a command
- * @token: the given command
- * @value: the path to build for @token
+ * dup_chars - duplicates characters
+ * @pathstr: the PATH string
+ * @start: starting index
+ * @stop: stopping index
  *
- * Return: @value/@token - the path of command
+ * Return: pointer to new buffer
  */
-char *build_path(char *token, char *value)
+char *dup_chars(char *pathstr, int start, int stop)
 {
-	char *cmd;
-	size_t len;
+	static char buf[1024];
+	int i = 0, k = 0;
 
-	len = _strlen(value) + _strlen(token) + 2;
-	cmd = malloc(sizeof(char) * len);
-	if (!cmd)
+	for (k = 0, i = start; i < stop; i++)
+		if (pathstr[i] != ':')
+			buf[k++] = pathstr[i];
+	buf[k] = 0;
+	return (buf);
+}
+
+/**
+ * find_path - finds this cmd in the PATH string
+ * @info: the info struct
+ * @pathstr: the PATH string
+ * @cmd: the cmd to find
+ *
+ * Return: full path of cmd if found or NULL
+ */
+char *find_path(info_t *info, char *pathstr, char *cmd)
+{
+	int i = 0, curr_pos = 0;
+	char *path;
+
+	if (!pathstr)
 		return (NULL);
-	memset(cmd, 0, len);
-
-	cmd = _strcat(cmd, value);
-	cmd = _strcat(cmd, "/");
-	cmd = _strcat(cmd, token);
-
-	return (cmd);
-}
-
-/**
- * check_cmd_path - check if command is in path
- * @cmd: an array of command strings
- *
- * Return: 0 if found, else 1
- */
-int check_cmd_path(char **cmd)
-{
-	char *path, *value, *cmd_path;
-	struct stat buf;
-
-	path = _getenv("PATH");
-	value = strtok(path, ":");
-	while (value)
+	if ((_strlen(cmd) > 2) && starts_with(cmd, "./"))
 	{
-		cmd_path = build_path(*cmd, value);
-
-		if (stat(cmd_path, &buf) == 0)
+		if (is_cmd(info, cmd))
+			return (cmd);
+	}
+	while (1)
+	{
+		if (!pathstr[i] || pathstr[i] == ':')
 		{
-			*cmd = _strdup(cmd_path);
-			free(cmd_path);
-			return (0);
+			path = dup_chars(pathstr, curr_pos, i);
+			if (!*path)
+				_strcat(path, cmd);
+			else
+			{
+				_strcat(path, "/");
+				_strcat(path, cmd);
+			}
+			if (is_cmd(info, path))
+				return (path);
+			if (!pathstr[i])
+				break;
+			curr_pos = i;
 		}
-		free(cmd_path);
-		value = strtok(NULL, ":");
+		i++;
 	}
-
-	return (1);
+	return (NULL);
 }

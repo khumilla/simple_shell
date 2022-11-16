@@ -1,52 +1,44 @@
 #include "main.h"
 
 /**
- * main - interactive user interface
- * @argc: unused
- * @argv: command line arguments passed to main
+ * main - entry point
+ * @ac: arg count
+ * @av: arg vector
  *
- * Return: void
+ * Return: 0 on success, 1 on error
  */
-int main(int argc, char **argv)
+int main(int ac, char **av)
 {
-	int (*builtin)(char **, int, char *);
-	char **tokens;
-	char *line;
-	size_t len = 0;
-	ssize_t nread;
-	int status = 0;
+	info_t info[] = { INFO_INIT };
+	int fd = 2;
 
-	(void) argc;
-	while (1)
+	asm ("mov %1, %0\n\t"
+		"add $3, %0"
+		: "=r" (fd)
+		: "r" (fd));
+
+	if (ac == 2)
 	{
-		if (isatty(STDIN_FILENO))
-
-			init_prompt();
-
-		nread = getline(&line, &len, stdin);
-		if (nread == -1)
-			return (1);
-
-		if (*line == '\n' || *line == '\0')
-			continue;
-
-		line = rm_newline(line);
-
-		tokens = parse_input(line);
-		if (!tokens || !tokens[0])
-			continue;
-
-		builtin = check_builtins(tokens);
-		if (builtin)
+		fd = open(av[1], O_RDONLY);
+		if (fd == -1)
 		{
-			status = builtin(tokens, status, argv[0]);
-			free_memory_pp(tokens);
-			continue;
+			if (errno == EACCES)
+				exit(126);
+			if (errno == ENOENT)
+			{
+				_eputs(av[0]);
+				_eputs(": 0: Can't open ");
+				_eputs(av[1]);
+				_eputchar('\n');
+				_eputchar(BUF_FLUSH);
+				exit(127);
+			}
+			return (EXIT_FAILURE);
 		}
-		else
-			status = execute(tokens, argv[0]);
-
-		free_memory_pp(tokens);
+		info->readfd = fd;
 	}
-	return (0);
+	populate_env_list(info);
+	read_history(info);
+	hsh(info, av);
+	return (EXIT_SUCCESS);
 }

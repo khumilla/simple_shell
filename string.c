@@ -1,63 +1,75 @@
 #include "main.h"
 
 /**
- * _strlen - function to find the length of a string
- * @s: string to be examined
+ * _strlen - returns the length of a string
+ * @s: the string whose length to check
  *
- * Return: the length of the string
+ * Return: integer length of string
  */
-
-int _strlen(const char *s)
+int _strlen(char *s)
 {
-	int x = 0;
+	int i = 0;
 
 	if (!s)
 		return (0);
 
 	while (*s++)
-		x++;
-
-	return (x);
+		i++;
+	return (i);
 }
 
 /**
- * _strstr - fucntion to implement strstr find a substring
- * @haystack: place to be searched for substring
- * @needle: substring to be found
+ * _strcmp - performs lexicogarphic comparison of two strangs.
+ * @s1: the first strang
+ * @s2: the second strang
  *
- * Return: a pointer to first member of substring or else NULL
+ * Return: negative if s1 < s2, positive if s1 > s2, zero if s1 == s2
  */
-
-char *_strstr(char *haystack, char *needle)
+int _strcmp(char *s1, char *s2)
 {
-	while (*haystack)
+	while (*s1 && *s2)
 	{
-		if ((*haystack == *needle) && cmp(haystack, needle))
-			return (haystack);
-		haystack++;
+		if (*s1 != *s2)
+			return (*s1 - *s2);
+		s1++;
+		s2++;
 	}
-
-	return (NULL);
+	if (*s1 == *s2)
+		return (0);
+	else
+		return (*s1 < *s2 ? -1 : 1);
 }
 
 /**
- * _strcat- function to concatenate two strings
- * @dest: the destination
- * @src: the source
+ * starts_with - checks if needle starts with haystack
+ * @haystack: string to search
+ * @needle: the substring to find
  *
- * Return: the concaternated string
+ * Return: address of next char of haystack or NULL
  */
-
-char *_strcat(char *dest, const char *src)
+char *starts_with(const char *haystack, const char *needle)
 {
-	int len_dest;
-	int i = 0;
+	while (*needle)
+		if (*needle++ != *haystack++)
+			return (NULL);
+	return ((char *)haystack);
+}
 
-	len_dest = _strlen(dest);
+/**
+ * _strcat - concatenates two strings
+ * @dest: the destination buffer
+ * @src: the source buffer
+ *
+ * Return: pointer to destination buffer
+ */
+char *_strcat(char *dest, char *src)
+{
+	char *ret = dest;
 
-	while (src[i])
-		dest[len_dest++] = src[i++];
-	dest[len_dest] = '\0';
-
-	return (dest);
+	while (*dest)
+		dest++;
+	while (*src)
+		*dest++ = *src++;
+	*dest = *src;
+	return (ret);
 }
