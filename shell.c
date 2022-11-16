@@ -15,9 +15,8 @@ int main(int argc, char **argv)
 	size_t len = 0;
 	ssize_t nread;
 	int status = 0;
-	
-	(void) argc;
 
+	(void) argc;
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
@@ -45,10 +44,9 @@ int main(int argc, char **argv)
 			continue;
 		}
 		else
-			status = execute (tokens,argv[0]);
-		
+			status = execute(tokens, argv[0]);
+
 		free_memory_pp(tokens);
 	}
-	
 	return (0);
 }
