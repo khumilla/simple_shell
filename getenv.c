@@ -21,8 +21,8 @@ char *_getenv(const char *name)
 			name++;
 		}
 
-		if (environ[x][y] == '=' && != *name)
-			return ((*(environ + i) + y++))
+		if (environ[x][y] == '=' && environ[x][y] != *name)
+			return ((*(environ + x) + y++));
 
 				x++;
 	}

@@ -7,7 +7,7 @@
  *
  * Return: void
  */
-int main(int argc, char **argv[])
+int main(int argc, char **argv)
 {
 	int (*builtin)(char **, int, char *);
 	char **tokens;
@@ -15,6 +15,8 @@ int main(int argc, char **argv[])
 	size_t len = 0;
 	ssize_t nread;
 	int status = 0;
+	
+	(void) argc;
 
 	while (1)
 	{

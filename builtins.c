@@ -18,11 +18,11 @@ builtin_t is_builtin(char *cmd)
 	int x;
 
 	for (x = 0; builtins[x].cmd; x++)
-
+	{
 		if (_strcmp(builtins[x].cmd, cmd) == 0)
 
 			return (builtins[x]);
-
+	}
 		return (builtins[x]);
 }
 
@@ -88,9 +88,9 @@ int exit_cmd(char **cmd, int status, char *filename)
 		exit(status);
 	}
 
-	while (cmd[1][i])
+	while (cmd[1][x])
 	{
-		if (_isalpha(cmd[1][i]) && cmd[1][i] != '-')
+		if (_isalpha(cmd[1][x]) && cmd[1][x] != '-')
 		{
 			print(filename);
 			print(": ");
@@ -101,12 +101,11 @@ int exit_cmd(char **cmd, int status, char *filename)
 			_putchar('\n');
 			return (1);
 		}
-		i++;
+		x++;
 	}
 
 	status = _atoi(cmd[1]);
-	free_memory_ppp(cmd);
+	free_memory_pp(cmd);
 
 	exit(status);
 }
-

@@ -51,7 +51,7 @@ char *_strstr(char *haystack, char *needle)
 char *_strcat(char *dest, const char *src)
 {
 	int len_dest;
-	i = 0;
+	int i = 0;
 
 	len_dest = _strlen(dest);
 

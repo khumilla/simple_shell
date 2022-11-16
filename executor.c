@@ -20,7 +20,7 @@ int execute(char **cmd, char *filename)
 
 	pid = fork();
 
-	if (pid == -)
+	if (pid == '-')
 	{
 		perror("Error");
 		exit(-1);
@@ -51,4 +51,3 @@ int execute(char **cmd, char *filename)
 	}
 	return (0);
 }
-
