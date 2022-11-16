@@ -19,7 +19,7 @@ void init_prompt(void)
 	s_1 = _strlen(s);
 	t_1 = _strlen(t);
 
-	prompt = malloc(p_1 + s_1 + s_1 + 1);
+	prompt = malloc(p_1 + s_1 + t_1 + 1);
 	if (!p || !s || !prompt)
 	{
 		printf("$ ");
@@ -33,5 +33,5 @@ void init_prompt(void)
 
 	print(prompt);
 
-	free(promt);
+	free(prompt);
 }
