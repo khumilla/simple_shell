@@ -48,6 +48,7 @@ int (*check_builtins(char **cmd))(char **, int, char *)
  * env_cmd - built-in implementation of env command
  * @cmd: unused
  * @status: status code
+ * @filename: unused
  *
  * Return: void
  */
@@ -72,6 +73,7 @@ int env_cmd(char **cmd, int status, char *filename)
  * exit_cmd - builtin implementation of exit command
  * @cmd: an array of given commands and arguments
  * @status: status code
+ * @filename: name of the shell
  *
  * Return: exit code
  */
@@ -96,7 +98,7 @@ int exit_cmd(char **cmd, int status, char *filename)
 			print(": ");
 			print("Illegal: ");
 			print(cmd[1]);
-			_putchar('\n');;
+			_putchar('\n');
 			return (1);
 		}
 		i++;
